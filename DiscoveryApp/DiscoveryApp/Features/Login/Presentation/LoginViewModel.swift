@@ -8,6 +8,10 @@
 import UIKit
 import GoogleSignIn
 
+extension Notification.Name {
+    static let loginSuccess = Notification.Name("LoginSuccessNotification")
+}
+
 final class LoginViewModel {
     
     var onLoginSuccess: (() -> Void)?
@@ -16,7 +20,7 @@ final class LoginViewModel {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(handleLoginSuccessNotification),
-            name: NSNotification.Name("LoginSuccessNotification"),
+            name: .loginSuccess,
             object: nil
         )
     }
@@ -26,9 +30,11 @@ final class LoginViewModel {
     }
 
     func checkSilentLogin() {
-        if GIDSignIn.sharedInstance.hasPreviousSignIn() {
-            LoginManager.sharedInstance().performSilentLogin()
+        guard GIDSignIn.sharedInstance.hasPreviousSignIn() else {
+            return
         }
+        
+        LoginManager.sharedInstance().performSilentLogin()
     }
     
     func signIn(from viewController: UIViewController) {

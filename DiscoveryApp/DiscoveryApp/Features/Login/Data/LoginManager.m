@@ -8,6 +8,8 @@
 #import "LoginManager.h"
 #import <GoogleSignIn/GoogleSignIn.h>
 
+static NSString *const LoginSuccessNotificationName = @"LoginSuccessNotification";
+
 @implementation LoginManager
 
 + (instancetype)sharedInstance {
@@ -51,7 +53,7 @@
 
 - (void)notifySuccess {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginSuccessNotification" object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:LoginSuccessNotificationName object:nil];
     });
 }
 

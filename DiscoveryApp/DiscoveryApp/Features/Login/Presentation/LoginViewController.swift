@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import GoogleSignIn
 
 final class LoginViewController: UIViewController {
     
@@ -20,12 +19,10 @@ final class LoginViewController: UIViewController {
         super.viewWillAppear(animated)
         
         viewModel.onLoginSuccess = { [weak self] in
-                self?.navigateToHome()
-            }
-            
-            setupGoogleSignInButton()
-            
-            viewModel.checkSilentLogin()
+            self?.navigateToHome()
+        }
+        
+        viewModel.checkSilentLogin()
     }
 
     override func viewDidLoad() {
@@ -40,7 +37,7 @@ final class LoginViewController: UIViewController {
         button.setTitle("Sign in with Google", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UIColor(red: 66/255, green: 133/255, blue: 244/255, alpha: 1)
+        button.backgroundColor = UIColor.clear
         button.layer.cornerRadius = 8
         button.contentEdgeInsets = UIEdgeInsets(top: 12, left: 24, bottom: 12, right: 24)
         button.addTarget(self, action: #selector(handleGoogleSignInTapped), for: .touchUpInside)
@@ -62,10 +59,17 @@ final class LoginViewController: UIViewController {
     
     private func navigateToHome() {
         DispatchQueue.main.async {
+            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let window = windowScene.windows.first else { return }
+            
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            
             let homeVC = storyboard.instantiateViewController(withIdentifier: "HomeViewController")
-            homeVC.modalPresentationStyle = .fullScreen
-            self.present(homeVC, animated: true, completion: nil)
+            
+            let nav = UINavigationController(rootViewController: homeVC)
+            
+            window.rootViewController = nav
+            UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
         }
     }
 }

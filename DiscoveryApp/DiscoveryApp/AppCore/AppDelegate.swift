@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        UINavigationBar.appearance().tintColor = .white
         
         let clientID = "35349519896-43d6i4luqqhbeblvgmaf5krihvnu490c.apps.googleusercontent.com"
         let config = GIDConfiguration(clientID: clientID)
