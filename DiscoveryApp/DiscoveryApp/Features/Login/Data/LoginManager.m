@@ -8,8 +8,6 @@
 #import "LoginManager.h"
 #import <GoogleSignIn/GoogleSignIn.h>
 
-static NSString *const LoginSuccessNotificationName = @"LoginSuccessNotification";
-
 @implementation LoginManager
 
 + (instancetype)sharedInstance {
@@ -25,13 +23,10 @@ static NSString *const LoginSuccessNotificationName = @"LoginSuccessNotification
     [GIDSignIn.sharedInstance signInWithPresentingViewController:presentingVC
                                                       completion:^(GIDSignInResult * _Nullable signInResult, NSError * _Nullable error) {
         if (error) {
-            NSLog(@"Login failed: %@", error.localizedDescription);
             return;
         }
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:LoginSuccessNotificationName object:nil];
-        });
+        [self notifySuccess];
     }];
 }
 
@@ -43,11 +38,21 @@ static NSString *const LoginSuccessNotificationName = @"LoginSuccessNotification
             }
             return;
         }
+        [self notifySuccess];
     }];
 }
 
 - (void)logout {
     [GIDSignIn.sharedInstance signOut];
+    [GIDSignIn.sharedInstance disconnectWithCompletion:^(NSError * _Nullable error) {
+        NSLog(@"User logged out and cache cleared.");
+    }];
+}
+
+- (void)notifySuccess {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginSuccessNotification" object:nil];
+    });
 }
 
 @end

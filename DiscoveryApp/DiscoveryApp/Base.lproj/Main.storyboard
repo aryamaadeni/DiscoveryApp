@@ -23,10 +23,51 @@
             </objects>
             <point key="canvasLocation" x="87.786259541984734" y="108.45070422535211"/>
         </scene>
+        <!--Home View Controller-->
+        <scene sceneID="TuL-lC-6Bz">
+            <objects>
+                <viewController storyboardIdentifier="HomeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="6ji-jN-vFt" customClass="HomeViewController" customModule="DiscoveryApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ct1-R4-dvO">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3yu-U3-kgs">
+                                <rect key="frame" x="323" y="98" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="2G5-as-NXM"/>
+                                    <constraint firstAttribute="height" constant="50" id="Q1x-kS-J7p"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="labelColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="power" catalog="system"/>
+                                <connections>
+                                    <action selector="logoutButtonClick:" destination="6ji-jN-vFt" eventType="touchUpInside" id="c1h-V4-vZe"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="iT1-lO-Ojf"/>
+                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                        <constraints>
+                            <constraint firstItem="iT1-lO-Ojf" firstAttribute="trailing" secondItem="3yu-U3-kgs" secondAttribute="trailing" constant="20" id="ERa-Er-DS2"/>
+                            <constraint firstItem="3yu-U3-kgs" firstAttribute="top" secondItem="iT1-lO-Ojf" secondAttribute="top" constant="-20" id="umm-z4-SkP"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jdU-va-0LH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="969" y="108"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="power" catalog="system" width="127" height="128"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemIndigoColor">
+            <color red="0.38039215686274508" green="0.33333333333333331" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

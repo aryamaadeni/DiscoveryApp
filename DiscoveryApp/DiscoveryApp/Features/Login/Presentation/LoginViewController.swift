@@ -8,94 +8,32 @@
 import UIKit
 import GoogleSignIn
 
-// MARK: - Protocols
-
-protocol LoginManaging {
-    func handleLogin(with presentingViewController: UIViewController)
-    func performSilentLogin()
-}
-
-extension LoginManager: LoginManaging {}
-
-// MARK: - Notifications
-
-extension Notification.Name {
-    static let loginSuccess = Notification.Name("LoginSuccessNotification")
-}
-
-// MARK: - ViewModel
-
-final class LoginViewModel {
-    
-    // MARK: - Dependencies
-    
-    private let loginManager: LoginManaging
-    
-    // MARK: - Outputs
-    
-    var onLoginSuccess: (() -> Void)?
-    
-    // MARK: - Initialization
-    
-    init(loginManager: LoginManaging = LoginManager.sharedInstance()) {
-        self.loginManager = loginManager
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleLoginSuccessNotification),
-            name: .loginSuccess,
-            object: nil
-        )
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    // MARK: - Lifecycle
-    
-    func viewDidLoad() {
-        performSilentLogin()
-    }
-    
-    // MARK: - Public API
-    
-    func signIn(from viewController: UIViewController) {
-        loginManager.handleLogin(with: viewController)
-    }
-    
-    // MARK: - Private Helpers
-    
-    private func performSilentLogin() {
-        loginManager.performSilentLogin()
-    }
-    
-    @objc
-    private func handleLoginSuccessNotification(_ notification: Notification) {
-        DispatchQueue.main.async { [weak self] in
-            self?.onLoginSuccess?()
-        }
-    }
-}
-
-// MARK: - ViewController
-
 final class LoginViewController: UIViewController {
     
     // MARK: - Properties
     
     private let viewModel = LoginViewModel()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    // MARK: - Lifecycle
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         viewModel.onLoginSuccess = { [weak self] in
-            self?.navigateToHome()
-        }
-        
-        setupGoogleSignInButton()
-        viewModel.viewDidLoad()
+                self?.navigateToHome()
+            }
+            
+            setupGoogleSignInButton()
+            
+            viewModel.checkSilentLogin()
     }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupGoogleSignInButton()
+    }
+    
+    // MARK: - UI Setup
     
     private func setupGoogleSignInButton() {
         let button = UIButton(type: .system)
@@ -118,13 +56,16 @@ final class LoginViewController: UIViewController {
     
     // MARK: - Actions
     
-    @objc
-    private func handleGoogleSignInTapped() {
+    @objc private func handleGoogleSignInTapped() {
         viewModel.signIn(from: self)
     }
     
-    @objc
     private func navigateToHome() {
-        
+        DispatchQueue.main.async {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let homeVC = storyboard.instantiateViewController(withIdentifier: "HomeViewController")
+            homeVC.modalPresentationStyle = .fullScreen
+            self.present(homeVC, animated: true, completion: nil)
+        }
     }
 }
